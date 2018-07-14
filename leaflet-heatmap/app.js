@@ -9,23 +9,25 @@ function createDefaultHeatmap (divtarget,divmap,overlaydata) {
 	/* 
 	 * Start with loading the GeoJSON data
 	 * Default to load ../common/data/data.json
+	 * Kalau nggak ada datanya, langsung ke failover.
 	 */
 	fetch(overlaydata)
 	.then(function(data){
+		/* harus di-return dulu sebagai JSON/GeoJSON, baru di-pass ke then() selanjutnya. */
 		return data.json();
 	})
 	.then(function(geojson){
 		document.getElementById(divtarget).innerHTML = "<div id='"+divmap+"'></div>";
-		
+		/* variablen */
 		var map, mapHash, opentopomap, OpenStreetMap_HOT, baseMaps, mapControl, isCollapsed, zoomControl, geojsonobjects, heatobjects = [], heatLayer, circlepoint;
-		
+		/* get the CSS for markers */
 		circlepoint = new L.divIcon({className: 'pointmarker'});
-		
+		/* OpenTopoMap */
 		opentopomap = new L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
 			maxZoom: 17,
 			attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
 		});
-		
+		/* OSM.HOT */
 		OpenStreetMap_HOT = new L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
 			maxZoom: 17,
 			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
@@ -34,33 +36,34 @@ function createDefaultHeatmap (divtarget,divmap,overlaydata) {
 		/* I love Indonesia */
 		map = L.map('map', {
 			zoom: parseInt(5), 
-			/* center: [parseFloat(-8), parseFloat(117)], */
 			layers: [OpenStreetMap_HOT],
 			zoomControl: false, 
 			minZoom: 3, 
 			maxZoom: 17, 
 			zoomControl: false});
-		
+		/* add zoom control */
 		zoomControl = new L.control.zoom({
 			position: "topleft"
 		}).addTo(map);
-		
+		/* cast GeoJSON objects ke layer kosong GeoJSON, untuk memodifikasi markernya. Default marker nya bikin berat kalau point nya sudah ribuan. */
 		geojsonobjects = new L.geoJson(geojson, {
 			pointToLayer: function (feature, latlng) {
 				return L.marker(latlng, {icon: circlepoint});
 			}
 		});
-		
+		/* kalau yang ini, cast GeoJSON objects ke layer kosong, tapi hanya diambil koordinatnya saja, terus di-push satu-satu ke heatobjects. */
 		L.geoJson(geojson, {
 			onEachFeature: function(feature, layer) {
 				heatobjects.push(feature.geometry.coordinates);
 			}
 		});
-		
+		/* dari layer GeoJSON, diambil bounds nya. */
 		var mapBounds = geojsonobjects.getBounds();
+		/* map nya di fit-bounds supaya nggak ngabyak kemana-mana.. */
 		map.fitBounds(mapBounds);
+		/* add layer GeoJSON nya */
 		map.addLayer(geojsonobjects);
-		
+		/* variablen heatobjects di-transliterasi ke array dalam array, dan hanya ngambil koordinatnya saja. */
 		heatobjects = heatobjects.map(function (p) { return [p[1], p[0]]; });
 		heatLayer = new L.heatLayer(heatobjects, {minOpacity:0.25,radius:35}, draw=false);
 		
@@ -75,7 +78,7 @@ function createDefaultHeatmap (divtarget,divmap,overlaydata) {
 		}
 		
 		mapControl = new L.control.layers(baseMaps, overlays, {collapsed: false}).addTo(map);
-		
+		/* DOM untuk control opacity di heatmap nya nanti. */
 		var extHeatmapControl = "" +
 			"<hr/>" +
 			"<div class=''>" +
@@ -84,7 +87,7 @@ function createDefaultHeatmap (divtarget,divmap,overlaydata) {
 			"</div>" +
 			"";
 		$('div.leaflet-top.leaflet-right > div.leaflet-control-layers.leaflet-control').append(extHeatmapControl);
-		
+		/* kalau layer heatmap di-overlay, maka range slider nya aktip. */
 		map.on("overlayadd", function(e) {
 		  if (e.layer === heatLayer) {
 				map.addLayer(heatLayer);
@@ -93,7 +96,7 @@ function createDefaultHeatmap (divtarget,divmap,overlaydata) {
 		  	/* do nothing */
 		  }
 		});
-		
+		/* kalau heatmap di-remove, maka range-slider di-deaktif, value nya di-reset juga ke 0.25. */
 		map.on("overlayremove", function(e) {
 		  if (e.layer === heatLayer) {
 				map.removeLayer(heatLayer);
@@ -103,16 +106,17 @@ function createDefaultHeatmap (divtarget,divmap,overlaydata) {
 		  	/* do nothing */
 		  }
 		});
-		
+		/* waktu valuenya range-slider diubah, heatmap nya di-setOptions, dan akhirnya map nya di-redraw(). */
 		$('#opacity').on('change', function(){
 			var ints = $(this).val();
 			$('#opacityrange').text(ints);
 			heatLayer.setOptions({minOpacity:ints});
 		});
-		
+		/* URL mapnya ditambahi hash, biar tahu sekarang di zoom berapa dan di mana. */
 		mapHash = new L.Hash(map);
 	})
 	.catch(function(error){
+		/* create failover map. */
 		createFailoverMap('app','map');
 		console.log(error);
 	});
