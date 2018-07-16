@@ -117,7 +117,7 @@ function createDefaultHeatmap (divtarget,divmap,overlaydata) {
 		gridXY = new L.Grid().addTo(map);
 		/* map nya ditambahi (lagi) scale control. Pakai native nya Leaflet saja, nggak usah plugin-plugin-an segala. */
 		scaleControl = L.control.scale({ position: "bottomleft", maxWidth: 200, metric: true, imperial: true, updateWhenIdle: false }).addTo(map);
-		/* URL mapnya ditambahi hash, biar tahu sekarang di zoom berapa dan di mana. */
+		/* URL mapnya ditambahi hash, biar tahu sekarang di zoom berapa dan centroid nya di mana. */
 		mapHash = new L.Hash(map);
 	})
 	.catch(function(error){
