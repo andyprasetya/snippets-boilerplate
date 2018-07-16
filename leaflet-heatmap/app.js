@@ -19,7 +19,7 @@ function createDefaultHeatmap (divtarget,divmap,overlaydata) {
 	.then(function(geojson){
 		document.getElementById(divtarget).innerHTML = "<div id='"+divmap+"'></div>";
 		/* variablen */
-		var map, mapHash, opentopomap, OpenStreetMap_HOT, baseMaps, mapControl, isCollapsed, zoomControl, geojsonobjects, heatobjects = [], heatLayer, circlepoint;
+		var map, mapHash, opentopomap, OpenStreetMap_HOT, baseMaps, mapControl, isCollapsed, zoomControl, scaleControl, gridXY, geojsonobjects, heatobjects = [], heatLayer, circlepoint;
 		/* get the CSS for markers */
 		circlepoint = new L.divIcon({className: 'pointmarker'});
 		/* OpenTopoMap */
@@ -112,6 +112,11 @@ function createDefaultHeatmap (divtarget,divmap,overlaydata) {
 			$('#opacityrange').text(ints);
 			heatLayer.setOptions({minOpacity:ints});
 		});
+		
+		/* map nya ditambahi grid */
+		gridXY = new L.Grid().addTo(map);
+		/* map nya ditambahi (lagi) scale control. Pakai native nya Leaflet saja, nggak usah plugin-plugin-an segala. */
+		scaleControl = L.control.scale({ position: "bottomleft", maxWidth: 200, metric: true, imperial: true, updateWhenIdle: false }).addTo(map);
 		/* URL mapnya ditambahi hash, biar tahu sekarang di zoom berapa dan di mana. */
 		mapHash = new L.Hash(map);
 	})
