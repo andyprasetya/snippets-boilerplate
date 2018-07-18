@@ -1,17 +1,28 @@
 html, body, #app {
+	font-family: 'Roboto', sans-serif;
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
 }
+.modal-body-padding-bottom-0 {padding-bottom: 0 !important;}
+.progress-wrapper {min-width:200px;min-height:36px;}
+.progress-text-indicator {margin-bottom:3px !important;}
 #map {
 	width: auto;
 	height: 100%;
 }
 .leaflet-google-layer{
-    z-index: 0 !important;
+	z-index: 0 !important;
+}
+.leaflet-control-container {
+  z-index: 1 !important;
 }
 .leaflet-control-layers {
   overflow: auto;
+}
+.control-toolbox-separator {
+	margin-top: 5px !important;
+	margin-bottom: 5px !important;
 }
 .leaflet-control-layers label {
   font-weight: normal;
@@ -27,4 +38,27 @@ html, body, #app {
   background: #ff7800;
   border: 1px solid #000;
   opacity: 0.85
+}
+.info {
+	padding: 6px 8px;
+	font: 14px/16px Arial, Helvetica, sans-serif;
+	background: white;
+	background: rgba(255,255,255,0.95);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
+}
+.info h4 {
+	margin: 0 0 5px;
+	color: #777;
+}
+.legend {
+	line-height: 18px;
+	color: #555;
+}
+.legend i {
+	width: 18px;
+	height: 18px;
+	float: left;
+	margin-right: 8px;
+	opacity: 0.7;
 }
