@@ -4,22 +4,45 @@
 		<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Snippets</title>
+		<title>Snippets :: Leaflet Heatmap</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css" integrity="sha256-iYUgmrapfDGvBrePJPrMWQZDcObdAcStKBpjP3Az+3s=" crossorigin="anonymous" />
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+		<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+		<link rel="stylesheet" href="../common/css/leaflet.groupedlayercontrol.css"/>
 		<link rel="stylesheet" href="../common/css/L.Grid.css"/>
 		<link rel="stylesheet" href="../common/css/fullscreenmap.css"/>
-		<script src="../common/js/pace.min.js"></script>
-		<link rel="stylesheet" href="../common/css/pace-loading-small.css"/>
 	</head>
 	<body>
-		
+
 		<div id="app" class=""></div>
+
+		<div class='modal fade' id='featureModal' tabindex='-1' role='dialog'>
+			<div id='feature_modal_size' class='modal-dialog' role='document'>
+				<div class='modal-content'>
+					<div class='modal-header bg-dark text-white'>
+						<h4 class='modal-title' id='feature-title'></h4>
+					</div>
+					<div id='feature-info' class='modal-body bg-dark'></div>
+					<div id='feature_modal_footer' class='modal-footer bg-dark'>
+						<button type='button' class='btn btn-default btn-sm' data-dismiss='modal'>Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+		<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js" type="text/javascript"></script>
+		<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+		<script src="https://www.amcharts.com/lib/3/serial.js"></script>
+		<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+		<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js" integrity="sha256-CNm+7c26DTTCGRQkM9vp7aP85kHFMqs9MhPEuytF+fQ=" crossorigin="anonymous"></script>
+		<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+		<script src="../common/js/leaflet.groupedlayercontrol.js"></script>
 		<script src="../common/js/L.Grid.js"></script>
 		<script src="../common/js/leaflet-heat.js"></script>
 		<script src="../common/js/leaflet-hash.js"></script>
