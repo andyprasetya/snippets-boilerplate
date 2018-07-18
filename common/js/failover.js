@@ -50,3 +50,14 @@ function createFailoverMap (divtarget,divmap) {
 	scaleControl = L.control.scale({ position: "bottomleft", maxWidth: 200, metric: true, imperial: true, updateWhenIdle: false }).addTo(map);
 	mapHash = new L.Hash(map);
 }
+
+function getColour(d) {
+    return d > 200 ? '#800026' :
+           d > 150  ? '#BD0026' :
+           d > 100  ? '#E31A1C' :
+           d > 75  ? '#FC4E2A' :
+           d > 50   ? '#FD8D3C' :
+           d > 25   ? '#FEB24C' :
+           d > 10   ? '#FED976' :
+                      '#FFEDA0';
+}
