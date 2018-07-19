@@ -9,7 +9,7 @@ $(document).ready(function(){
 	})
 	.then(function(geojsonarea){
 		
-		$('#progress-indicator-text').html("<p class='progress-text-indicator'>Processing GeoJSON data...<br/><i>..Long enough. Need a speed-optimisation.</i></p>");
+		$('#progress-indicator-text').html("<p class='progress-text-indicator'>Processing GeoJSON data...<br/><small><i>..Too long! Need a speed-optimisation.</i></small></p>");
 		
 		fetch('../common/data/data.json')
 		.then(function(pointsdata){
